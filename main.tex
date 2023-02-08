@@ -1,0 +1,35 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath}
+
+\title{Literature Review}
+\author{Cole Granger}
+\date{February 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+This literature review will focus on attaining the previous methods used for music generation with neural networks and other machine learning techniques, whether they are data type specific, style specific, and their own success metrics and success.
+
+\section{Literature}
+\begin{enumerate}
+    \item H. H. Mao, T. Shin and G. Cottrell, "DeepJ: Style-Specific Music Generation," 2018 IEEE 12th International Conference on Semantic Computing (ICSC), Laguna Hills, CA, USA, 2018, pp. 377-382, doi: 10.1109/ICSC.2018.00077. 
+    \vspace{0.1cm}\\
+    Previous work: used LSTM Recurrent NN to predict the probability of the next note based on previously generated notes. In their current
+    research, They use Biaxial LSTM, A piano roll represents the notes played at each time step as a binary vector, where a 1 represents the note corresponding to its index is being played and a 0 represents the note is not being played. A piece of music is a $NxT$ binary matrix where $N$ is the number of playable notes and $T$ is the number of time steps.\\
+    T = $\begin{bmatrix}
+    0 & 0 & 0 & 0\\
+    1 & 1 & 0 & 0\\
+    0 & 0 & 0 & 0\\
+    1 & 1 & 0 & 0
+    \end{bmatrix}$\\
+    There is also a replay matrix known as $T_replay$ hence \textbf{biaxial}.\\
+\noindent\rule{\textwidth}{1pt}
+    \item
+\noindent\rule{\textwidth}{1pt}
+    \item
+\end{enumerate}
+
+\end{document}
