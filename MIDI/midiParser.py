@@ -1,19 +1,26 @@
 import mido
-import music21
 
-# This will read in the midi file
-mid = mido.MidiFile('mary.mid')
+# This will print each track, and their corrisponding messages.
+# for i, track in enumerate(mid.tracks):
+#     print('Track {}: {}'.format(i, track.name))
+#     for msg in track:
+#         print(msg)
 
-# Iterator through list of tracks in the file
-# This also prints their messages
-for i in mid.tracks:
-    # print(i)
-    pass
+# for i in mid.tracks:
+#     print(i)
 
-# This will print all messages for the file
-for i in mid:
-    # print(i)
-    pass
 
-s = music21.converter.parse('mary.mid')
-print(s)
+def note_velocity_arr(mid: mido.MidiFile):
+    notes = []
+    for i, track in enumerate(mid.tracks):
+        for msg in track:
+            if msg.type == 'note_on':
+                notes.append([msg.note, msg.velocity])
+    return notes
+
+
+if __name__ == '__main__':
+    
+# Read in our midi file
+    mid = mido.MidiFile('./mary.mid')
+    print(note_velocity_arr(mid))
