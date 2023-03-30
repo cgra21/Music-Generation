@@ -1,6 +1,5 @@
 
 import mido
-import numpy as np
 
 # This will print each track, and their corrisponding messages.
 # for i, track in enumerate(mid.tracks):
@@ -12,6 +11,7 @@ import numpy as np
 #     print(i)
 
 
+<<<<<<< HEAD
 def to_arr(mid: mido.MidiFile, absolute_time = True, binary = False, note_only = False) -> list:
     # This will return a list containing note properties
     # [on/off, note, velocity, deltaTime] for each note
@@ -84,11 +84,22 @@ def msgdict(msg):
     # This will create an empty matrix with time steps * [88] zeros
     # Need to track previous notes until we get a note_off message, perhaps make a dictionary to track? update dictionary when given a different note activation comman
     # Need to track time steps in order to fill piano roll properly
+=======
+def note_velocity_arr(mid: mido.MidiFile):
+    notes = []
+    for i, track in enumerate(mid.tracks):
+        for msg in track:
+            if msg.type == 'note_on':
+                notes.append([msg.note, msg.velocity])
+    return notes
+
+>>>>>>> parent of f0c16c65 (Update midiParser.py)
 
 if __name__ == '__main__':
     
-    # Read in our midi file
+# Read in our midi file
     mid = mido.MidiFile('./mary.mid')
+<<<<<<< HEAD
     
     # print(note_velocity_arr(mid))
     # print(mid.length)
@@ -118,3 +129,6 @@ if __name__ == '__main__':
     #             print(msg.dict())
     notes = to_arr(mid)
     print(to_duration(notes))
+=======
+    print(note_velocity_arr(mid))
+>>>>>>> parent of f0c16c65 (Update midiParser.py)
