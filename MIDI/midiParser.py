@@ -10,11 +10,18 @@ import mido
 # for i in mid.tracks:
 #     print(i)
 
-
-<<<<<<< HEAD
-def to_arr(mid: mido.MidiFile, absolute_time = True, binary = False, note_only = False) -> list:
+def to_arr(mid: mido.MidiFile, velocity_based = False, absolute_time = False, binary = False, note_only = False, time_only = False) -> list:
     # This will return a list containing note properties
     # [on/off, note, velocity, deltaTime] for each note
+    # TODO: I am just now realizing that you cannot use these kwargs in tandem, this function will break if you try and use them all at once
+    # FIX
+    if time_only == True:
+        times = []
+        for track in mid.tracks:
+            for msg in track:
+                if msg.type == 'note_on':
+                    times.append(msg.time)
+        return times
     if note_only == True:
         notes = []
         for track in mid.tracks:
@@ -50,6 +57,12 @@ def to_arr(mid: mido.MidiFile, absolute_time = True, binary = False, note_only =
                 if msg.type == 'note_off':
                     abs_time += msg.time
                     notes.append([0, msg.note, msg.time])
+    if velocity_based == True:
+        notes = []
+        for track in mid.tracks:
+            for msg in track:
+                if msg.type == 'note_on' and msg.velocity != 0:
+                    notes.append(msg.note)
     return notes
 
 def to_duration(notes: list):
@@ -84,7 +97,7 @@ def msgdict(msg):
     # This will create an empty matrix with time steps * [88] zeros
     # Need to track previous notes until we get a note_off message, perhaps make a dictionary to track? update dictionary when given a different note activation comman
     # Need to track time steps in order to fill piano roll properly
-=======
+
 def note_velocity_arr(mid: mido.MidiFile):
     notes = []
     for i, track in enumerate(mid.tracks):
@@ -93,13 +106,54 @@ def note_velocity_arr(mid: mido.MidiFile):
                 notes.append([msg.note, msg.velocity])
     return notes
 
->>>>>>> parent of f0c16c65 (Update midiParser.py)
+def to_midi(self, notes, name: str, bpm):
+        # TODO Create function to convert back to midi file from array of notes
+        tempo = mido.bpm2tempo(bpm)
+        new_midi = mido.MidiFile()
+        new_track = mido.MidiTrack()
+        new_midi.tracks.append(new_track)
+        on_status = {1:'note_on',0:'note_off'}
+        for note in notes:
+            msg = mido.Message(on_status[note[0]], note = note[1], velocity = note[2], time = note[3])
+            new_track.append(msg)
+        new_midi.save(f'{name}.mid')
+        return
+    
+def note_to_midi(notes: list, name: str):
+    '''takes a list of basic notes i.e [65, 55, 34, 28, 64,...] and converts it 
+    to a midi file. 
+    This midi file will only play one note at a time, at a fixed velocity, and fixed
+    timing.'''
+    new_midi = mido.MidiFile()
+    new_track = mido.MidiTrack()
+    for note in notes:
+        msg = mido.Message('note_on', note = note, time = 124)
+        new_track.append(msg)
+        msg_off = mido.Message('note_off',note = note, time = 124)
+        new_track.append(msg_off)
+    new_midi.tracks.append(new_track)
+    new_midi.save(f'{name}.mid')
+    return
+
+def time_to_midi(notes, times: list, name: str):
+    '''takes a list of midi notes and times and combines them to create
+    a new midi file. Must be of same length'''
+    if len(notes) != len(times):
+        raise Error('lists of unequal length')
+    new_midi = mido.MidiFile()
+    new_track = mido.MidiTrack()
+    for note, time  in zip(notes, times):
+        msg = mido.Message('note_on', note = note, time = time)
+        new_track.append(msg)
+    new_midi.tracks.append(new_track)
+    new_midi.save(f'{name}.mid')
+    return
 
 if __name__ == '__main__':
     
 # Read in our midi file
     mid = mido.MidiFile('./mary.mid')
-<<<<<<< HEAD
+
     
     # print(note_velocity_arr(mid))
     # print(mid.length)
@@ -129,6 +183,3 @@ if __name__ == '__main__':
     #             print(msg.dict())
     notes = to_arr(mid)
     print(to_duration(notes))
-=======
-    print(note_velocity_arr(mid))
->>>>>>> parent of f0c16c65 (Update midiParser.py)
