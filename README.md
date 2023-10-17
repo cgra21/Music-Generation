@@ -1,6 +1,21 @@
 # Music-Generation
 Music Generation Research Project
 
+# Fall 2023
+
+The goal of this current iteration is to explore the application of NLP methods to music generation. This will include:
+- Development or implementation of an existing method to tokenize data from MIDI files
+- Training a transformer model on this data
+- Creating a UI so someone can input their own data into the model and generate music
+
+  This will leverage various datasets, which have no been fully defined yet.
+  I plan to mainly use PyTorch for the model implementation, and either PyGUI or PyQt5 for the UI
+
+
+
+# Spring 2023 - Depricated
+
+You can now find the results and other documents in /Spring_2023
 ## Purpose
 
 The purpose of this project is to explore various methods using Machine Learning and Neural Networks to generate the best sounding music possible. Artifical intelligence has expanded to the realms of art and writing, but there are few tools focusing on music generation. 
