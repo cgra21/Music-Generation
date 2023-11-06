@@ -1,6 +1,7 @@
 from fastai.basics import *
 from .numpy_encode import *
 from .music_transformer import transform
+from typing import Collection
 
 BOS = 'xxbos' #Beginning of sequence
 PAD = 'xxpad' # padding
@@ -18,7 +19,9 @@ SEP = 'xxsep' # Used to denote end of timestep (required for polyphony). separat
 SPECIAL_TOKS = [BOS, PAD, EOS, S2SCLS, MASK, CSEQ, MSEQ, NSCLS, SEP] # Important: SEP token must be last
 
 NOTE_TOKS = [f'n{i}' for i in range(NOTE_SIZE)] 
+# NOTE_SIZE is imported from numpy_encode
 DUR_TOKS = [f'd{i}' for i in range(DUR_SIZE)]
+# DUR_SIZE is imported from numpy_encode
 NOTE_START, NOTE_END = NOTE_TOKS[0], NOTE_TOKS[-1]
 DUR_START, DUR_END = DUR_TOKS[0], DUR_TOKS[-1]
 
@@ -86,13 +89,19 @@ class MusicVocab():
         pickle.dump(self.itos, open(path, 'wb'))
 
     @classmethod
+    # Note about @classmethod, 
+    # This passes a "cls" this isn't "self", this is the class itself, so this will need to be called with a class object
     def create(cls) -> 'Vocab':
         "Create a vocabulary from a set of `tokens`."
         itos = SPECIAL_TOKS + NOTE_TOKS + DUR_TOKS + MTEMPO_TOKS
+        # Create a list of index tokens for a new class
         if len(itos)%8 != 0:
             itos = itos + [f'dummy{i}' for i in range(len(itos)%8)]
-        return cls(itos)
+        # This will create a new object of the class MusicVocab, passing itos, into the class - see __init__
+        # This will also result in the creation of a string-to-index dictionary in the class construction as well.
+        return cls(itos) 
     
+    # Essentially, a classmethod is a method that can instatiate a class object, it allows us to encapsulate a portion of the intial setup, whether that be parsing a string, into the construction of the class
     @classmethod
     def load(cls, path):
         "Load the `Vocab` contained in `path`"

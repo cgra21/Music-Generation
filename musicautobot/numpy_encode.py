@@ -14,6 +14,14 @@ NOTE_SIZE = 128 # i.e. range of note values
 DUR_SIZE = (10*BPB*SAMPLE_FREQ)+1 # Max length - 8 bars. Or 16 beats/quarternotes
 MAX_NOTE_DUR = (8*BPB*SAMPLE_FREQ)
 
+# Decoding process
+# 1. NoteEnc -> numpy chord array
+# 2. numpy array -> music21.Stream
+def npenc2stream(arr, bpm=120):
+    "Converts numpy encoding to music21 stream"
+    chordarr = npenc2chordarr(np.array(arr)) # 1.
+    return chordarr2stream(chordarr, bpm=bpm) # 2.
+
 
 ##### ENCODING ######
 
@@ -52,7 +60,7 @@ def stream2chordarr(s, note_size=NOTE_SIZE, sample_freq=SAMPLE_FREQ, max_note_du
     # iterate through each part and get note and chord information from above
     for idx,part in enumerate(s.parts):
         notes=[]
-        for elem in part.flat:
+        for elem in part.flatten():
             if isinstance(elem, music21.note.Note):
                 notes.append(note_data(elem.pitch, elem))
             if isinstance(elem, music21.chord.Chord):
@@ -98,7 +106,7 @@ def timestep2npenc(timestep, note_range=PIANO_RANGE, enc_type=None):
         notes.append([n,d,i])
         
     notes = sorted(notes, key=lambda x: x[0], reverse=True) # sort by note (highest to lowest)
-    
+    # Note: this is sorted per timestep, so the order is maintained on the overall arr
     if enc_type is None: 
         # note, duration
         return [n[:2] for n in notes] 
