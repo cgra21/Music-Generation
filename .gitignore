@@ -4,3 +4,5 @@ venv
 TrigramSentenceBuilder.ipynb
 .ipynb_checkpoints
 data/clean_midi.tar.gz
+data/midis_v1.2
+musicautobot
