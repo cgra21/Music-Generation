@@ -1,0 +1,1 @@
+# Need to create a custom dataloader that can retrieve MIDI files, process them into text, and then create a vocab for our model
