@@ -4,3 +4,4 @@ venv
 TrigramSentenceBuilder.ipynb
 .ipynb_checkpoints
 data/clean_midi.tar.gz
+testing/transformer/transformers.ipynb
