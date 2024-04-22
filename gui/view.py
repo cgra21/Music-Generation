@@ -6,6 +6,6 @@ from PyQt5.QtCore import Qt
 class Viewer(QGraphicsView):
     def __init__(self):
         super().__init__()
-        self.setScene(PianoRollGrid(88, 20, 50, 20))
+        self.setScene(PianoRollGrid(107, 20, 50, 20))
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)

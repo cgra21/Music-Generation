@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 import sys
 
 class noteButton(QGraphicsRectItem):
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y, w, h, row):
         super().__init__(x, y, w, h)
         self.setAcceptHoverEvents(True)
         self.setFlag(QGraphicsItem.ItemSendsGeometryChanges, True)
@@ -15,6 +15,12 @@ class noteButton(QGraphicsRectItem):
         self.clickedBrush = QBrush(Qt.blue)
         self.setBrush(self.normalBrush)
         self.isClicked = False
+
+        # In order to calculate the note value, we need to add
+        # 21 to the row value, since they start at 21
+        self.noteValue = 127 - row
+        # Dur is just 1 for now, since we only include quarter notes
+        self.dur = 1
 
     def hoverEnterEvent(self, event):
         # Only change to hover color if the item hasn't been clicked
@@ -35,6 +41,7 @@ class noteButton(QGraphicsRectItem):
         else:
             self.setBrush(self.normalBrush)  # Revert to normal color
         super().mousePressEvent(event)
+        print(self.noteValue)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

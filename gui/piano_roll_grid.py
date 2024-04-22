@@ -23,7 +23,7 @@ class PianoRollGrid(QGraphicsScene):
         for i in range(self.rows):
             y = i * self.y_size
             key = QGraphicsRectItem(0, y, self.key_width, self.y_size)
-            if (i % 12) in [1, 3, 6, 8, 10]:  
+            if ((i+21) % 12) in [1, 3, 6, 8, 10]:  
                 key.setBrush(QColor('black'))
             else:
                 key.setBrush(QColor('white'))
@@ -38,7 +38,7 @@ class PianoRollGrid(QGraphicsScene):
                 y = i * self.y_size
                 
                 # Create a rectangle item and add it to the scene
-                rect = noteButton(x, y, self.x_size, self.y_size)
+                rect = noteButton(x, y, self.x_size, self.y_size, i)
                 self.addItem(rect)
                 
         dark_pen = QPen(Qt.darkGray)
