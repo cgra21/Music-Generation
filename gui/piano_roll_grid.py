@@ -21,10 +21,9 @@ class PianoRollGrid(QGraphicsScene):
         self.note_buttons = []
 
         self.setSceneRect(0, 0, cols * x_size + self.key_width, rows * y_size)
-        self.updateGrid(self.rows, self.cols, initial_setup=True)
+        self.updateGrid()
 
-    def updateGrid(self, rows, cols, initial_setup=False):
-        self.rows = rows
+    def updateGrid(self):
         for i in range(self.rows):
             y = i * self.y_size
 
@@ -47,20 +46,28 @@ class PianoRollGrid(QGraphicsScene):
                 key.setBrush(QColor('white'))
             self.addItem(key)
         
-        self.drawMeasures(cols)
+        self.drawMeasures(self.cols)
         self.drawHorizontalLines()
 
     def mouseDoubleClickEvent(self, event):
-        x = event.scenePos().x() - self.key_width
-        y = event.scenePos().y()
-        if x >= 0:  # Ensure clicks are within the grid area past the key width
+        pos = event.scenePos()
+        x = pos.x() - self.key_width
+        y = pos.y()
+        items = self.items(pos)
+        if isinstance(items[0], noteButton): # check if there already exists a note, if so, remove it
+            note = items[0]
+            self.removeItem(note)
+            
+            # Remove from note list
+            if note in self.note_buttons:
+                self.note_buttons.remove(note)
+            return
+        elif x >= 0:  # Ensure clicks are within the grid area past the key width
             col = int(x // self.x_size)
             row = int(y // self.y_size)
             if 0 <= col < self.cols and 0 <= row < self.rows:
                 self.addNoteButton(row, col)
-                
-
-            
+        
     def drawMeasures(self, cols):
         dark_pen = QPen(Qt.darkGray)
         dark_pen.setWidth(2)  # Optional: Make the line thicker for visibility
@@ -101,35 +108,12 @@ class PianoRollGrid(QGraphicsScene):
     def get_note_buttons(self):
         return self.note_buttons
     
-
+    def clearNotes(self):
+        for note_button in self.note_buttons:
+            self.removeItem(note_button)
+        self.note_buttons.clear() 
+        
 if __name__ == '__main__':
     grid = PianoRollGrid(50, 50, 50, 20)  
     grid.run()
 
-
-
-        # if initial_setup:
-        #     # Create the grid of rectangles
-        #     for j in range(cols):
-        #         col_buttons = []
-        #         for i in range(rows):
-        #             col_buttons.append(self.addNoteButton(i, j))
-        #         self.note_buttons.append(col_buttons)
-        #     self.drawLine(cols)
-        # else:
-        #     # Adjust columns dynamically
-        #     current_cols = len(self.note_buttons)
-        #     if cols > current_cols:
-        #         # Add new columns
-        #         for j in range(current_cols, cols):
-        #             column_buttons = []
-        #             for i in range(rows):
-        #                 column_buttons.append(self.addNoteButton(i, j))
-        #             self.note_buttons.append(column_buttons)
-        #         self.drawLine(cols)
-        #     elif cols < current_cols:
-        #         # Remove excess columns
-        #         for j in range(cols, current_cols):
-        #             column_to_remove = self.note_buttons.pop()
-        #             for item in column_to_remove:
-        #                 self.removeItem(item)

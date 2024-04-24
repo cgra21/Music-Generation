@@ -8,7 +8,7 @@ class MidiConverter:
     def extract_notes(self):
         notes = []
         for note_button in self.grid.note_buttons:
-            start_time = (note_button.rect().left() / self.grid.x_size) - 1  # Calculate start time based on x position
+            start_time = ((note_button.pos().x() + note_button.rect().x()) / self.grid.x_size) - 1  # Calculate start time based on x position
             duration = note_button.dur
             pitch = note_button.noteValue 
             velocity = 64  # Default velocity
@@ -22,7 +22,6 @@ class MidiConverter:
     def convert_to_midi(self, filename='output.mid'):
         s = stream.Stream()
         for start_time, n in self.extract_notes():
-            print(start_time)
             # Set the offset for the note in the stream
             s.insert(start_time, n)
         

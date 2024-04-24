@@ -5,10 +5,12 @@ from PyQt5.QtWidgets import QAction
 
 class Menu(QMenuBar):
 
-    def __init__(self, parent: QWidget | None, midi_callback=None, tensor_callback=None) -> None:
+    def __init__(self, parent: QWidget | None, midi_callback=None, tensor_callback=None, new_callback = None) -> None:
         super().__init__(parent)
         self.midi_callback = midi_callback
         self.tensor_callback = tensor_callback
+        self.new_callback = new_callback
+
         self._create_actions()
         self._create_menu_bar()
 
@@ -22,16 +24,23 @@ class Menu(QMenuBar):
         fileMenu.addAction(self.toMidiAction)
         fileMenu.addAction(self.toTensorAction)
 
+
+        if self.new_callback:
+            print("Added new callback")
+            self.newAction.triggered.connect(self.new_callback)
+            fileMenu.addAction(self.newAction)
+            
         if self.midi_callback:
             print("Added MIDI callback")
             self.toMidiAction.triggered.connect(self.midi_callback)  # Connect to MIDI conversion callback
             fileMenu.addAction(self.toMidiAction)
         
         if self.tensor_callback:
+            print("Added Tensor callback")
             self.toTensorAction.triggered.connect(self.tensor_callback)
             fileMenu.addAction(self.toTensorAction)
 
-        
+
         editMenu = QMenu('&Edit', self)
         self.addMenu(editMenu)
         editMenu.addAction(self.copyAction)
